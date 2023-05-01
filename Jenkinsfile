@@ -4,7 +4,7 @@ pipeline {
         git 'Default'
     }
     environment {
-        SSH_CRED = credentials('flask-app')
+        SSH_CRED = credentials('flask_app')
         def CONNECT = 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com'
     }
 
@@ -24,7 +24,7 @@ pipeline {
         stage('Deploy Docker Image') {
             steps {
                 script {
-                    sshagent(['flask-app']) {
+                    sshagent(['flask_app']) {
                         sh 'ssh ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com docker pull docker://thecodegirl/my-flask-app:latest'
                         sh 'ssh ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com docker stop my-flask-app || true'
                         sh 'ssh ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com docker rm my-flask-app || true'
