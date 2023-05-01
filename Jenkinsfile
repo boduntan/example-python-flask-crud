@@ -11,6 +11,7 @@ pipeline {
     stages {
         stage('Build Docker Image') {
             steps {
+                echo 'building docker image'
                 script {
                     docker.withRegistry('https://hub.docker.com/thecodegirl/py_flask', 'dockerhub') {
                         def app = docker.build('my-flask-app', '.')
