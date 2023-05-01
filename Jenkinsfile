@@ -1,9 +1,8 @@
-@Library('docker') _
-
 pipeline {
     agent any
     tools {
         git 'Default'
+        docker 'docker'
     }
     environment {
         SSH_CRED = credentials('flask_app')
