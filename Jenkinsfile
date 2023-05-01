@@ -14,7 +14,7 @@ pipeline {
                         usernameVariable: 'DOCKER_USERNAME',
                         passwordVariable: 'DOCKER_PASSWORD'
                      ]]) {
-                        docker.withRegistry("${DOCKER_REGISTRY}", "${DOCKER_USERNAME}", "${DOCKER_PASSWORD}") {
+                        docker.withRegistry('${DOCKER_REGISTRY}', '${DOCKER_USERNAME}', '${DOCKER_PASSWORD}') {
                             def image = docker.build("thecodegirl/my-flask-app", "--file Dockerfile .")
                             docker.image(image.id).inside {
                                 sh "pip install --upgrade pip"
