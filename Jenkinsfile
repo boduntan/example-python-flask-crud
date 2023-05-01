@@ -1,20 +1,24 @@
 pipeline {
     agent any
-    tools {
-        git 'Default'
-        docker 'docker'
-    }
+    //tools {
+    //    git 'Default'
+    //    docker 'docker'
+    //}
+    //environment {
+   //     SSH_CRED = credentials('flask_app')
+    //    def CONNECT = 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-15-222-253-202.ca-central-1.compute.amazonaws.com'
+    //}
     environment {
-        SSH_CRED = credentials('flask_app')
-        def CONNECT = 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com'
+        DOCKER_REGISTRY = "https://hub.docker.com/"
+        DOCKER_USERNAME = credentials('thecodegirl')
+        DOCKER_PASSWORD = credentials('Western4612%')
     }
-
     stages {
         stage('Build Docker Image') {
             steps {
                 echo 'building docker image'
                 script {
-                    docker.withRegistry('https://hub.docker.com/thecodegirl/py_flask', 'dockerhub') {
+                    docker.withRegistry("${DOCKER_REGISTRY}", "${DOCKER_USERNAME}", "${DOCKER_PASSWORD}") {
                         def app = docker.build('my-flask-app', '.')
                         app.push('latest')
                     }
@@ -26,13 +30,13 @@ pipeline {
             steps {
                 script {
                     sshagent(['flask_app']) {
-                        sh 'ssh ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com docker pull docker://thecodegirl/my-flask-app:latest'
-                        sh 'ssh ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com docker stop my-flask-app || true'
-                        sh 'ssh ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com docker rm my-flask-app || true'
-                        sh 'ssh ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com docker run -d --name my-flask-app -p 80:5000 docker://thecodegirl/my-flask-app:latest'
+                        sh 'ssh ubuntu@ec2-15-222-253-202.ca-central-1.compute.amazonaws.com docker pull docker://thecodegirl/my-flask-app:latest'
+                        sh 'ssh ubuntu@ec2-15-222-253-202.ca-central-1.compute.amazonaws.com docker stop my-flask-app || true'
+                        sh 'ssh ubuntu@ec2-15-222-253-202.ca-central-1.compute.amazonaws.com docker rm my-flask-app || true'
+                        sh 'ssh ubuntu@ec2-15-222-253-202.ca-central-1.compute.amazonaws.com docker run -d --name my-flask-app -p 80:5000 docker://thecodegirl/my-flask-app:latest'
                     }
                 }
             }
         }
-    }
+    }    
 }
