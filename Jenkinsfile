@@ -25,10 +25,10 @@ pipeline {
             steps {
                 script {
                     sshagent(['flask-app']) {
-                        sh 'ssh ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com docker pull https://hub.docker.com/repository/docker/thecodegirl/my-flask-app:latest'
+                        sh 'ssh ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com docker pull docker://thecodegirl/my-flask-app:latest'
                         sh 'ssh ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com docker stop my-flask-app || true'
-                        sh 'ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com docker rm my-flask-app || true'
-                        sh 'ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com docker run -d --name my-flask-app -p 80:5000 https://hub.docker.com/repository/docker/thecodegirl//my-flask-app:latest'
+                        sh 'ssh ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com docker rm my-flask-app || true'
+                        sh 'ssh ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com docker run -d --name my-flask-app -p 80:5000 docker://thecodegirl/my-flask-app:latest'
                     }
                 }
             }
