@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        Git 'Default Git'
+        git 'Default'
     }
     environment {
         SSH_CRED = credentials('flask-app')
