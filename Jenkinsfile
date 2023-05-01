@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+        Git 'Default Git'
+    }
     environment {
         SSH_CRED = credentials('flask-app')
         def CONNECT = 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-35-183-27-121.ca-central-1.compute.amazonaws.com'
@@ -16,6 +19,7 @@ pipeline {
                 }
             }
         }
+
         stage('Deploy Docker Image') {
             steps {
                 script {
