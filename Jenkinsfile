@@ -1,15 +1,7 @@
 pipeline {
     agent any
-    //tools {
-    //    git 'Default'
-    //    docker 'docker'
-    //}
-    //environment {
-   //     SSH_CRED = credentials('flask_app')
-    //    def CONNECT = 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-15-222-253-202.ca-central-1.compute.amazonaws.com'
-    //}
     environment {
-        DOCKER_REGISTRY = "https://hub.docker.com/"
+        DOCKER_REGISTRY = 'https://hub.docker.com/'
         DOCKER_USERNAME = credentials('thecodegirl')
         DOCKER_PASSWORD = credentials('Western4612%')
     }
