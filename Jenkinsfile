@@ -1,6 +1,9 @@
 pipeline {
     agent any
     environment {
+        SSH_CRED = credentials('flash_app')
+        SSH_HOST = 'ec2-15-222-253-202.ca-central-1.compute.amazonaws.com'
+        SSH_USER = 'ubuntu'
         DOCKER_REGISTRY = 'docker.io'
     }
     stages {
@@ -14,7 +17,7 @@ pipeline {
                         usernameVariable: 'DOCKER_USERNAME',
                         passwordVariable: 'DOCKER_PASSWORD'
                      ]]) {
-                        docker.withRegistry('DOCKER_REGISTRY', 'DOCKER_USERNAME', 'DOCKER_PASSWORD') {
+                        docker.withRegistry('${DOCKER_REGISTRY}', '${DOCKER_USERNAME}', '${DOCKER_PASSWORD}') {
                             def image = docker.build("thecodegirl/my-flask-app", "--file Dockerfile .")
                             docker.image(image.id).inside {
                                 sh "pip install --upgrade pip"
@@ -36,11 +39,11 @@ pipeline {
         stage('Deploy Docker Image') {
             steps {
                 script {
-                    sshagent(['flask_app']) {
-                        sh 'ssh ubuntu@ec2-15-222-253-202.ca-central-1.compute.amazonaws.com docker pull thecodegirl/my-flask-app:latest'
-                        sh 'ssh ubuntu@ec2-15-222-253-202.ca-central-1.compute.amazonaws.com docker stop my-flask-app || true'
-                        sh 'ssh ubuntu@ec2-15-222-253-202.ca-central-1.compute.amazonaws.com docker rm my-flask-app || true'
-                        sh 'ssh ubuntu@ec2-15-222-253-202.ca-central-1.compute.amazonaws.com docker run -d --name my-flask-app -p 80:5000 thecodegirl/my-flask-app:latest'
+                    sshagent([SSH_CRED]) {
+                        sh "ssh ${SSH_USER}@${SSH_HOST} docker pull thecodegirl/my-flask-app:latest"
+                        sh "ssh ${SSH_USER}@${SSH_HOST} docker stop my-flask-app || true"
+                        sh "ssh ${SSH_USER}@${SSH_HOST} docker rm my-flask-app || true"
+                        sh "ssh ${SSH_USER}@${SSH_HOST} docker run -d --name my-flask-app -p 80:5000 thecodegirl/my-flask-app:latest"
                     }
                 }
             }
