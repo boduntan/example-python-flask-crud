@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        SSH_CRED = credentials('flash_app')
+        SSH_CRED = credentials('flask_app')
         SSH_HOST = 'ec2-15-222-253-202.ca-central-1.compute.amazonaws.com'
         SSH_USER = 'ubuntu'
         DOCKER_REGISTRY = 'docker.io'
