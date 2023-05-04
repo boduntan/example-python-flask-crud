@@ -24,11 +24,11 @@ pipeline {
                         //dockerImage.push("docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}")
                     sh "docker login -u ${DOCKER_HUB_USERNAME} -p ${DOCKER_HUB_PASSWORD}"
                     sh "docker push ${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
-                    
-                    }
+
                 }
             }
         }
+        
 
         stage('Pull and Build Image') {
             steps {
@@ -45,10 +45,11 @@ pipeline {
                             container.waitForCondition(timeout: 120, condition: { container.logContains('Build completed successfully') })
                         } finally {
                             container.stop()
-                        }
+                           }
                     }
                 }
             }
         }
     }
-}
+}  
+
