@@ -13,7 +13,7 @@ pipeline {
                 script {
                     withCredentials([[
                         $class: 'UsernamePasswordMultiBinding',
-                        credentialsId: 'Dockerhub',
+                        credentialsId: 'new_pair',
                         usernameVariable: 'DOCKER_USERNAME',
                         passwordVariable: 'DOCKER_PASSWORD'
                      ]]) {
