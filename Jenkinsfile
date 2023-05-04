@@ -5,6 +5,9 @@ pipeline {
         DOCKER_HUB_CREDENTIALS = 'flask_app'
         DOCKER_IMAGE_NAME = 'py_flask'
         DOCKER_IMAGE_TAG = 'latest'
+        SSH_CRED = credentials('new_pair')
+        SSH_HOST = 'ec2-3-96-160-14.ca-central-1.compute.amazonaws.com'
+        SSH_USER = 'ubuntu'
     }
 
     stages {
@@ -15,10 +18,13 @@ pipeline {
                     def dockerImage = docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}", "-f Dockerfile .")
                     echo "Docker image: ${dockerImage}"
                     // Authenticate with Docker Hub
-                    withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
+                    //withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                         //dockerImage.push("${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}")
-                        dockerImage.push("docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_NAME}")
-
+                        //dockerImage.push("docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}")
+                        //dockerImage.push("docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}")
+                    sh "docker login -u ${DOCKER_HUB_USERNAME} -p ${DOCKER_HUB_PASSWORD}"
+                    sh "docker push ${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                    
                     }
                 }
             }
