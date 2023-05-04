@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        SSH_CRED = credentials('flask_app')
+        SSH_CRED = credentials('new_pair')
         SSH_HOST = 'ec2-3-96-160-14.ca-central-1.compute.amazonaws.com'
         SSH_USER = 'ubuntu'
         DOCKER_REGISTRY = 'docker.io'
@@ -13,7 +13,7 @@ pipeline {
                 script {
                     withCredentials([[
                         $class: 'UsernamePasswordMultiBinding',
-                        credentialsId: 'new_pair',
+                        credentialsId: 'flask_app',
                         usernameVariable: 'DOCKER_USERNAME',
                         passwordVariable: 'DOCKER_PASSWORD'
                      ]]) {
