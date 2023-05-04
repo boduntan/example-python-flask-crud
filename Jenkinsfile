@@ -7,34 +7,24 @@ pipeline {
         DOCKER_REGISTRY = 'docker.io'
     }
     stages {
-        stage('Build Docker Image') {
+        stage('Build and Push Image') {
             steps {
-                echo 'building docker image'
                 script {
-                    withCredentials([[
-                        $class: 'UsernamePasswordMultiBinding',
-                        credentialsId: 'flask_app',
-                        usernameVariable: 'DOCKER_USERNAME',
-                        passwordVariable: 'DOCKER_PASSWORD'
-                     ]]) {
-                        docker.withRegistry('${DOCKER_REGISTRY}', '${DOCKER_USERNAME}', '${DOCKER_PASSWORD}') {
-                            def image = docker.build("thecodegirl/my-flask-app", "--file Dockerfile .")
-                            docker.image(image.id).inside {
-                                sh "pip install --upgrade pip"
-                                sh "export FLASK_APP=crudapp.py"
-                                sh "flask db init"
-                                sh 'flask db migrate -m "entries table"'
-                                sh "flask db upgrade"
-                                sh "flask run --host=0.0.0.0"
-                            }
-                            docker.withRegistry("${DOCKER_REGISTRY}", "${DOCKER_USERNAME}", "${DOCKER_PASSWORD}") {
-                                docker.image("thecodegirl/my-flask-app").push("latest")
-                            }
-                        }
+                    // Build the Docker image
+                    
+                    // Authenticate with Docker Hub
+                    withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
+                        def dockerImage = docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}", "-f Dockerfile .")
+                        sh """ 
+                        docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+                        dockerImage.push()
+                        """
+
                     }
                 }
             }
         }
+
 
         stage('Deploy Docker Image') {
             steps {
