@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_CREDENTIALS = 'new_pair'
+        DOCKER_HUB_CREDENTIALS = 'flask_app'
         DOCKER_IMAGE_NAME = 'py_flask'
         DOCKER_IMAGE_TAG = 'latest'
     }
