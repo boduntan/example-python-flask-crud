@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     sshagent([SSH_CRED]) {
-                    sh "ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} docker pull ${DOCKER_IMAGE}"
+                    sh "ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} docker pull thecodegirl/py_flask:latest"
                     sh "ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} docker stop my-flask-app || true"
                     sh "ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} docker rm my-flask-app || true"
                     sh "ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} docker run -d --name my-flask-app -p 80:5000 ${DOCKER_IMAGE}"
