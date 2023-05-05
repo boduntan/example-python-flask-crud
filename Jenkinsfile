@@ -39,10 +39,10 @@ pipeline {
             steps {
                 script {
                     sshagent([SSH_CRED]) {
-                        sh "ssh ${SSH_USER}@${SSH_HOST} docker pull thecodegirl/my-flask-app:latest"
-                        sh "ssh ${SSH_USER}@${SSH_HOST} docker stop my-flask-app || true"
-                        sh "ssh ${SSH_USER}@${SSH_HOST} docker rm my-flask-app || true"
-                        sh "ssh ${SSH_USER}@${SSH_HOST} docker run -d --name my-flask-app -p 80:5000 thecodegirl/my-flask-app:latest"
+                        sh "ssh ${SSH_USER}@${SSH_HOST} docker pull thecodegirl/py_flask:latest"
+                        sh "ssh ${SSH_USER}@${SSH_HOST} docker stop py_flask || true"
+                        sh "ssh ${SSH_USER}@${SSH_HOST} docker rm py_flask || true"
+                        sh "ssh ${SSH_USER}@${SSH_HOST} docker run -d --name my-flask-app -p 80:5000 thecodegirl/py_flask:latest"
                     }
                 }
             }
