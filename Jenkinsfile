@@ -20,8 +20,10 @@ pipeline {
                         sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD"
                         //docker.image("thecodegirl/my-flask-app").push("latest")
                         sh """
+                
                             docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} -f Dockerfile .
-                            docker push thecodegirl/my-flask-app:latest
+                            docker tag py_flask thecodegirl/py_flask:latest
+                            docker push thecodegirl/py_flask:latest
                             """
                         //docker.image("${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").push()
                         //dockerImage.push("${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}")
