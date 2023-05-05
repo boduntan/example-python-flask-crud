@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKER_HUB_CREDENTIALS = 'flask_app'
         SSH_CRED = credentials('new_pair')
-        SSH_HOST = 'ec2-3-96-160-14.ca-central-1.compute.amazonaws.com'
+        SSH_HOST = 'ec2-3-98-120-44.ca-central-1.compute.amazonaws.com'
         SSH_USER = 'ubuntu'
         DOCKER_IMAGE_NAME = 'py_flask'
         DOCKER_IMAGE_TAG = 'latest'
